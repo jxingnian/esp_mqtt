@@ -1,92 +1,74 @@
-# ESP32 WiFi配网项目
+# ESP32 MQTT 项目
 
-By.星年
+By. 星年
 
 ## 项目介绍
 
-这是一个基于ESP32-S3的WiFi配网项目，提供了一个简单易用的Web界面来配置ESP32的WiFi连接。用户可以通过手机或电脑连接到ESP32的AP热点，然后通过Web界面扫描并连接到周围的WiFi网络。
+这是一个基于 ESP32 的 MQTT 项目，旨在提供一个简单易用的 MQTT 客户端，用户可以通过该客户端连接到 MQTT 代理，进行消息的发布和订阅。该项目支持多种功能，包括设备状态监控和数据传输。
 
 ### 特性
 
-- 简洁美观的Web配置界面
-- WiFi扫描和信号强度显示
-- 支持查看当前WiFi连接状态
-- 支持管理已保存的WiFi配置
-- 支持删除不需要的WiFi配置
-- 自动重连机制
-- 实时状态更新
+- 支持 MQTT 连接和消息发布/订阅
+- 实时设备状态更新
+- 支持 WiFi 配置和管理
+- 简洁的代码结构，易于扩展和维护
 
 ### 硬件要求
 
 - 芯片：ESP32-S3
-- Flash：16MB
-- 支持WiFi功能
+- Flash：8MB 或更大
+- 支持 WiFi 功能
 
 ## 使用说明
 
 ### 1. 首次使用
 
-1. ESP32启动后会创建一个名为"myssid"的WiFi热点
-2. 默认密码：mypassword
-3. 连接到该热点后，使用浏览器访问 http://192.168.4.1
-4. 在Web界面上可以看到可用的WiFi网络列表
-5. 选择想要连接的WiFi，输入密码进行连接
+1. 在 ESP32 启动后，配置 WiFi 连接。
+2. 使用 MQTT 客户端连接到指定的 MQTT 代理。
+3. 通过代码发布和订阅消息。
 
-### 2. 修改AP热点配置
+### 2. 修改 MQTT 配置
 
-在menuconfig中配置
+在 `mqtt_xn.c` 文件中配置 MQTT 代理地址和端口。
 
-Example Configuration -> wifi ssid
+### 3. 查看设备状态
 
-Example Configuration -> wifi password
-
-### 3. 查看WiFi状态
-
-- Web界面会实时显示当前WiFi连接状态
-- 显示已连接WiFi的信号强度
-- 显示BSSID等详细信息
-
-### 4. 管理保存的WiFi
-
-- 查看已保存的WiFi列表
-- 可以快速连接已保存的WiFi
-- 支持删除不需要的WiFi配置
+- 通过 MQTT 消息实时接收设备状态更新。
+- 可以通过订阅特定主题来获取状态信息。
 
 ## 项目结构
 
 - `/main` - 主要源代码
-  - `main.c` - 程序入口和WiFi初始化
-  - `http_server.c` - Web服务器和API实现
-- `/spiffs` - Web界面文件
-  - `index.html` - 主页面
-- `/partitions.csv` - 分区表配置
+  - `mqtt_xn.c` - MQTT 客户端实现
+  - `wifi_manager.c` - WiFi 管理功能
+- `/CMakeLists.txt` - CMake 构建配置
+- `/sdkconfig` - SDK 配置文件
 
 ---
 
-## 注意
+## 注意事项
 
-1.项目已开启加密
-
-2.flash8M
-
-3.关闭nvs加密
+1. 确保 WiFi 配置正确。
+2. 确保 MQTT 代理可访问。
+3. 检查网络连接状态。
 
 ## 自定义配置
 
 ### 1. 修改分区表
 
-项目使用了自定义的分区表，可以在 `partitions.csv`中修改。
+项目使用了自定义的分区表，可以在 `partitions.csv` 中进行修改。
 
 ### 2. 移植到其他项目
 
-1. 复制 `http_server.c`和 `index.html`到目标项目
-2. 确保目标项目包含必要的组件配置
-3. 在主程序中调用 `start_webserver()`函数
+1. 复制相关源文件到目标项目。
+2. 确保目标项目包含必要的组件配置。
+3. 在主程序中调用 MQTT 初始化和连接函数。
+4. menuconfig开启mqtt5
 
 ## 开发环境
 
 - ESP-IDF 版本：v5.0
-- 芯片：esp32-s3
+- 芯片：ESP32-S3
 - 编译器：GCC
 - 开发工具：VS Code + ESP-IDF 插件
 
@@ -96,4 +78,4 @@ MIT License
 
 ## 链接
 
-- GitHub仓库：https://github.com/jxingnian/esp32_wifi_network_config
+- GitHub 仓库：https://github.com/jxingnian/esp_mqtt

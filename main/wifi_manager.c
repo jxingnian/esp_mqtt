@@ -9,7 +9,7 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 #include "wifi_manager.h"
-
+#include "mqtt_xn.h"
 // WiFi配置参数
 #define EXAMPLE_ESP_WIFI_SSID      CONFIG_ESP_WIFI_SSID        // WiFi名称
 #define EXAMPLE_ESP_WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD    // WiFi密码
@@ -78,6 +78,7 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                 nvs_commit(nvs_handle);
                 nvs_close(nvs_handle);
             }
+            mqtt5_app_start();
         }
     }
 }
