@@ -1,8 +1,8 @@
 /*
  * @Author: jxingnian j_xingnian@163.com
  * @Date: 2025-01-01 11:27:58
- * @LastEditors: jxingnian j_xingnian@163.com
- * @LastEditTime: 2025-01-02 00:15:13
+ * @LastEditors: xingnina j_xingnian@163.com
+ * @LastEditTime: 2025-01-03 14:50:33
  * @FilePath: \EspWifiNetworkConfig\main\main.c
  * @Description: WiFi配网主程序
  */
@@ -15,7 +15,6 @@
 #include "esp_spiffs.h"
 #include "wifi_manager.h"
 #include "http_server.h"
-
 static const char *TAG = "main";
 
 // 初始化SPIFFS
@@ -54,7 +53,7 @@ static esp_err_t init_spiffs(void)
 }
 
 void app_main(void)
-{
+{    
     // 初始化NVS
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {

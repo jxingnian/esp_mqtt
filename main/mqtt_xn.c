@@ -114,39 +114,12 @@ static void mqtt5_event_handler(void *handler_args, esp_event_base_t base, int32
     ESP_LOGD(TAG, "free heap size is %d, maxminu %d", esp_get_free_heap_size(), esp_get_minimum_free_heap_size());
     switch ((esp_mqtt_event_id_t)event_id) {
     case MQTT_EVENT_CONNECTED:
-        ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        print_user_property(event->property->user_property);
-        // 设置发布属性并发布消息
-        esp_mqtt5_client_set_user_property(&publish_property.user_property, user_property_arr, USE_PROPERTY_ARR_SIZE);
-        esp_mqtt5_client_set_publish_property(client, &publish_property);
-        msg_id = esp_mqtt_client_publish(client, "/topic/qos1", "data_3", 0, 1, 1);
-        esp_mqtt5_client_delete_user_property(publish_property.user_property);
-        publish_property.user_property = NULL;
-        ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
-
-        // 设置订阅属性并订阅主题
-        esp_mqtt5_client_set_user_property(&subscribe_property.user_property, user_property_arr, USE_PROPERTY_ARR_SIZE);
-        esp_mqtt5_client_set_subscribe_property(client, &subscribe_property);
-        msg_id = esp_mqtt_client_subscribe(client, "/topic/qos0", 0);
-        esp_mqtt5_client_delete_user_property(subscribe_property.user_property);
-        subscribe_property.user_property = NULL;
-        ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
-
-        // 设置另一个订阅属性并订阅主题
-        esp_mqtt5_client_set_user_property(&subscribe1_property.user_property, user_property_arr, USE_PROPERTY_ARR_SIZE);
-        esp_mqtt5_client_set_subscribe_property(client, &subscribe1_property);
-        msg_id = esp_mqtt_client_subscribe(client, "/topic/qos1", 2);
-        esp_mqtt5_client_delete_user_property(subscribe1_property.user_property);
-        subscribe1_property.user_property = NULL;
-        ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
-
-        // 设置取消订阅属性并取消订阅主题
-        esp_mqtt5_client_set_user_property(&unsubscribe_property.user_property, user_property_arr, USE_PROPERTY_ARR_SIZE);
-        esp_mqtt5_client_set_unsubscribe_property(client, &unsubscribe_property);
-        msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos0");
-        ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
-        esp_mqtt5_client_delete_user_property(unsubscribe_property.user_property);
-        unsubscribe_property.user_property = NULL;
+            ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+            msg_id = esp_mqtt_client_subscribe(client, "topic/xingnian", 0);
+            ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+            msg_id = esp_mqtt_client_publish(client, "topic/xingnian", "hello xingnian", 0, 1, 0);
+            ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
+            break;
         break;
     case MQTT_EVENT_DISCONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
@@ -181,6 +154,7 @@ static void mqtt5_event_handler(void *handler_args, esp_event_base_t base, int32
         ESP_LOGI(TAG, "content_type is %.*s", event->property->content_type_len, event->property->content_type);
         ESP_LOGI(TAG, "TOPIC=%.*s", event->topic_len, event->topic);
         ESP_LOGI(TAG, "DATA=%.*s", event->data_len, event->data);
+        
         break;
     case MQTT_EVENT_ERROR:
         ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
@@ -239,9 +213,9 @@ void mqtt5_app_start(void)
         // 禁用自动重连功能
         .network.disable_auto_reconnect = true,
         // 设置MQTT用户名
-        .credentials.username = "123",
+        .credentials.username = "xingnian",
         // 设置MQTT密码
-        .credentials.authentication.password = "456",
+        .credentials.authentication.password = "12345678",
         // 设置遗嘱消息的主题
         .session.last_will.topic = "/topic/will",
         // 设置遗嘱消息的内容
